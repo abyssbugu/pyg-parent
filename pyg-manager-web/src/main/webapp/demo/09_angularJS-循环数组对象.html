@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>03_angularJS模块化设计</title>
+<script type="text/javascript" src="plugins/angularjs/angular.min.js"></script>
+<script type="text/javascript">
+	//定义模块
+	//参数1：模块名称
+	//参数2：数组，数组中可以引入多个插件
+	var app = angular.module("pyg", []);
+
+	//定义模块下控制器
+	app.controller("helloController", function($scope) {
+
+		//定义数组
+		$scope.list = [ {
+			name : '张三',
+			shuxue : 100,
+			yuwen : 93
+		}, {
+			name : '李四',
+			shuxue : 88,
+			yuwen : 87
+		}, {
+			name : '王五',
+			shuxue : 77,
+			yuwen : 56
+		} ];
+
+	})
+</script>
+</head>
+<body ng-app="pyg" ng-controller="helloController">
+	<h1 ng-repeat="entity in list">姓名：{{entity.name}}  数学：{{entity.shuxue}} 语文：{{entity.yuwen}}</h1>
+</body>
+</html>
