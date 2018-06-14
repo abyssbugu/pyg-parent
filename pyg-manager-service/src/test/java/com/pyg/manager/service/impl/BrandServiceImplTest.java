@@ -3,6 +3,7 @@ package com.pyg.manager.service.impl;
 import com.pyg.manager.service.BrandService;
 import com.pyg.mapper.BrandMapper;
 import com.pyg.pojo.TbBrand;
+import org.apache.ibatis.session.RowBounds;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class BrandServiceImplTest {
     public void findAll() {
         List<TbBrand> brands = brandMapper.findAll();
         for (TbBrand brand : brands) {
-            System.out.println(brand.getName());
+            System.out.println(brand.getFirstChar());
         }
     }
 }

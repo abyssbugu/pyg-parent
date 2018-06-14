@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>03_angularJS模块化设计</title>
-<script type="text/javascript" src="plugins/angularjs/angular.min.js"></script>
-<script type="text/javascript">
-	//定义模块
-	//参数1：模块名称
-	//参数2：数组，数组中可以引入多个插件
-	var app = angular.module("pyg", []);
+    <meta charset="UTF-8">
+    <title>03_angularJS模块化设计</title>
+    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+    <script type="text/javascript">
+        //定义模块
+        //参数1：模块名称
+        //参数2：数组，数组中可以引入多个插件
+        var app = angular.module("pyg", []);
 
-	//定义模块下控制器
-	app.controller("helloController", function($scope) {
+        //定义模块下控制器
+        app.controller("helloController", function ($scope) {
 
-		//加法运算
-		$scope.add = function(x,y){
-			$scope.z = x+y;
-		}
+            //加法运算
+            $scope.add = function (x, y) {
+                $scope.z = x + y;
+            }
 
-	})
+        })
 
-</script>
+    </script>
 </head>
 <body ng-app="pyg" ng-controller="helloController">
-	<button value="点击事件" ng-click="add(8,8)">加法点击事件</button>
-	<h1>{{z}}</h1>
+<button value="点击事件" ng-click="add(8,8)">加法点击事件</button>
+<h1>{{z}}</h1>
 </body>
 </html>
