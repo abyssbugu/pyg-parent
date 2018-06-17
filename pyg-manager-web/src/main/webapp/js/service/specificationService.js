@@ -28,4 +28,9 @@ app.service("specificationService", function ($http) {
         return $http.get("../specification/delete?ids=" + ids);
     }
 
+    // 删除
+    this.findSpecList = function () {
+        return $http.get("../specification/findSpecList");
+    }
+
 });

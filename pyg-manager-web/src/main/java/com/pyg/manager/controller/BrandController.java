@@ -1,6 +1,7 @@
 package com.pyg.manager.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import com.pyg.utils.PageResult;
 import com.pyg.utils.PygResult;
@@ -84,5 +85,12 @@ public class BrandController {
 
 		return result;
 
+	}
+
+	@RequestMapping("findBrandList")
+	public List<Map> findBrandList(){
+		//调用服务层方法
+		List<Map> list = brandService.findBrandList();
+		return list;
 	}
 }

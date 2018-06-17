@@ -16,6 +16,9 @@ import com.pyg.vo.Specification;
 
 import sun.print.resources.serviceui;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/typeTemplate")
 public class TypeTemplateController {
@@ -85,5 +88,7 @@ public class TypeTemplateController {
 		PygResult result = typeTemplateService.delete(ids);
 		return result;
 	}
-	
+
+
+
 }

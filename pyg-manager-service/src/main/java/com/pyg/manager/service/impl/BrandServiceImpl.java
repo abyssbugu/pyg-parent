@@ -10,8 +10,10 @@ import com.pyg.pojo.TbBrand;
 import com.pyg.utils.PageResult;
 import com.pyg.utils.PygResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BrandServiceImpl implements BrandService {
@@ -95,4 +97,11 @@ public class BrandServiceImpl implements BrandService {
         }
 
     }
+
+    @Override
+    public List<Map> findBrandList() {
+        return tbBrandMapper.findBrandList();
+    }
+
+
 }

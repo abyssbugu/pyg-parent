@@ -5,6 +5,7 @@ import com.pyg.utils.PageResult;
 import com.pyg.utils.PygResult;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Abyss on 2018/6/12.
@@ -45,4 +46,6 @@ public interface BrandService {
      * 需求：根据id删除品牌数据
      */
      PygResult delete(Long[] ids);
+
+    List<Map> findBrandList();
 }

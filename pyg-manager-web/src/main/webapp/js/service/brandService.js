@@ -28,4 +28,9 @@ app.service("brandService", function ($http) {
         return $http.get("../brand/delete?ids=" + ids);
     }
 
+    // 删除
+    this.findBrandList = function () {
+        return $http.get("../brand/findBrandList");
+    }
+
 });
