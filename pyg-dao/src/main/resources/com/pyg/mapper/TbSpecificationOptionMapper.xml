@@ -193,4 +193,8 @@
       orders = #{orders,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="findSpecList" resultType="map">
+    select id,spec_name text from tb_specification
+  </select>
 </mapper>

@@ -90,7 +90,6 @@ public class BrandServiceImpl implements BrandService {
             // 删除成功
             return new PygResult(true, "删除成功");
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return new PygResult(false, "删除失败");
         }

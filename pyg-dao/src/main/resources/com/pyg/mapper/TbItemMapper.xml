@@ -104,7 +104,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from tb_item
     where id = #{id,jdbcType=BIGINT}
@@ -368,28 +368,28 @@
   <update id="updateByExample" parameterType="map">
     update tb_item
     set id = #{record.id,jdbcType=BIGINT},
-      title = #{record.title,jdbcType=VARCHAR},
-      sell_point = #{record.sellPoint,jdbcType=VARCHAR},
-      price = #{record.price,jdbcType=DECIMAL},
-      stock_count = #{record.stockCount,jdbcType=INTEGER},
-      num = #{record.num,jdbcType=INTEGER},
-      barcode = #{record.barcode,jdbcType=VARCHAR},
-      image = #{record.image,jdbcType=VARCHAR},
-      categoryId = #{record.categoryid,jdbcType=BIGINT},
-      status = #{record.status,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      item_sn = #{record.itemSn,jdbcType=VARCHAR},
-      cost_pirce = #{record.costPirce,jdbcType=DECIMAL},
-      market_price = #{record.marketPrice,jdbcType=DECIMAL},
-      is_default = #{record.isDefault,jdbcType=VARCHAR},
-      goods_id = #{record.goodsId,jdbcType=BIGINT},
-      seller_id = #{record.sellerId,jdbcType=VARCHAR},
-      cart_thumbnail = #{record.cartThumbnail,jdbcType=VARCHAR},
-      category = #{record.category,jdbcType=VARCHAR},
-      brand = #{record.brand,jdbcType=VARCHAR},
-      spec = #{record.spec,jdbcType=VARCHAR},
-      seller = #{record.seller,jdbcType=VARCHAR}
+    title = #{record.title,jdbcType=VARCHAR},
+    sell_point = #{record.sellPoint,jdbcType=VARCHAR},
+    price = #{record.price,jdbcType=DECIMAL},
+    stock_count = #{record.stockCount,jdbcType=INTEGER},
+    num = #{record.num,jdbcType=INTEGER},
+    barcode = #{record.barcode,jdbcType=VARCHAR},
+    image = #{record.image,jdbcType=VARCHAR},
+    categoryId = #{record.categoryid,jdbcType=BIGINT},
+    status = #{record.status,jdbcType=VARCHAR},
+    create_time = #{record.createTime,jdbcType=TIMESTAMP},
+    update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+    item_sn = #{record.itemSn,jdbcType=VARCHAR},
+    cost_pirce = #{record.costPirce,jdbcType=DECIMAL},
+    market_price = #{record.marketPrice,jdbcType=DECIMAL},
+    is_default = #{record.isDefault,jdbcType=VARCHAR},
+    goods_id = #{record.goodsId,jdbcType=BIGINT},
+    seller_id = #{record.sellerId,jdbcType=VARCHAR},
+    cart_thumbnail = #{record.cartThumbnail,jdbcType=VARCHAR},
+    category = #{record.category,jdbcType=VARCHAR},
+    brand = #{record.brand,jdbcType=VARCHAR},
+    spec = #{record.spec,jdbcType=VARCHAR},
+    seller = #{record.seller,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

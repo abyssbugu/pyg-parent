@@ -5,6 +5,7 @@ import com.pyg.pojo.TbSpecificationOptionExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TbSpecificationOptionMapper {
     long countByExample(TbSpecificationOptionExample example);
@@ -28,4 +29,5 @@ public interface TbSpecificationOptionMapper {
     int updateByPrimaryKeySelective(TbSpecificationOption record);
 
     int updateByPrimaryKey(TbSpecificationOption record);
+
 }

@@ -25,7 +25,7 @@ app.controller("specificationController", function ($scope, $controller, specifi
     $scope.add = function () {
         var obj = null;
         //判断是否是修改，还是添加操作
-        if ($scope.entity.id != null) {
+        if ($scope.entity.tbSpecification.id != null) {
             //修改
             obj = specificationService.update($scope.entity);
         } else {
