@@ -109,5 +109,16 @@ public class SellerController {
 	public PageResult search(@RequestBody TbSeller seller, int page, int rows  ){
 		return sellerService.findPage(seller, page, rows);		
 	}
+
+	/**
+	 * 需求：审核商家，修改商家状态
+	 */
+	@RequestMapping("updateStatus")
+	public PygResult updateStatus(String status, @RequestBody TbSeller seller) {
+
+		//调用远程服务方法
+		PygResult result = sellerService.updateStatus(status, seller);
+		return result;
+	}
 	
 }

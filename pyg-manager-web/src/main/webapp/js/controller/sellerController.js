@@ -76,5 +76,18 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
 			}			
 		);
 	}
+
+    //审核商家，修改商家状态
+    //0-未审核  1-审核通过  2-审核未通过  3-商家关闭
+    $scope.updateStatus = function(entity,status){
+        //调用service方法
+        sellerService.updateStatus(entity,status).success(function(data){
+            if(data.success){
+                $scope.reloadList();
+            }else{
+                alert("审核未通过");
+            }
+        })
+    }
     
 });	

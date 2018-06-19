@@ -3,7 +3,7 @@ app.controller("baseController", function ($scope) {
 
     //定义分页控件刷新方法
     $scope.reloadList = function () {
-        $scope.findPage($scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
+        $scope.search($scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
     }
 
     //分页控件配置

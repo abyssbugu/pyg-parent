@@ -1,5 +1,7 @@
 package com.pyg.manager.service.impl;
 import java.util.List;
+
+import com.pyg.utils.PygResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
@@ -158,6 +160,22 @@ public class SellerServiceImpl implements SellerService {
 		
 		Page<TbSeller> page= (Page<TbSeller>)sellerMapper.selectByExample(example);		
 		return new PageResult(page.getTotal(), page.getResult());
+	}
+
+	/**
+	 * 需求：审核商家，修改商家状态
+	 */
+	public PygResult updateStatus(String status, TbSeller seller) {
+		try {
+			// 修改对象状态
+			seller.setStatus(status);
+			//直接修改
+			sellerMapper.updateByPrimaryKeySelective(seller);
+			return new PygResult(true,"修改成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new PygResult(false,"修改失败");
+		}
 	}
 	
 }

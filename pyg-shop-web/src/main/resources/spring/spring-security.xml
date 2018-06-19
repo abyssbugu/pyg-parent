@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+             xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+						http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+
+    <!-- 1，放行资源 -->
+    <http pattern="/shoplogin.html" security="none"></http>
+    <http pattern="/register.html" security="none"></http>
+    <http pattern="/shoplogin_error.html" security="none"></http>
+    <http pattern="/js/**" security="none"></http>
+    <http pattern="/img/**" security="none"></http>
+    <http pattern="/css/**" security="none"></http>
+    <http pattern="/plugins/**" security="none"></http>
+    <http pattern="/seller/add" security="none"></http>
+
+    <!-- 2，配置安全认证拦截规则 -->
+    <http use-expressions="false">
+        <!-- intercept-url:拦截规则 pattern： 1） /* 只能拦截根目录下所有资源 2）/** 拦截所有目录，包括子目录
+            access： 1)配置用户角色 ： ROLE_ADMIN,ROLE_USER 2)use-expressions没有配置，access="hasRole('ROLE_USER')" -->
+        <intercept-url pattern="/**" access="ROLE_USER" />
+        <!-- 表示使用form表单进行登录认证 -->
+        <!-- 默认使用spring security框架提供登录页面进行认证 -->
+        <!-- login-page:指定安全框架认证登录页面 default-target-url:默认的目标地址 （登录成功后跳转地址） always-use-default-target：表示登录成功始终跳转到default-target-url所指向的地址 -->
+        <form-login login-page="/shoplogin.html"
+                    default-target-url="/admin/index.html" always-use-default-target="true"
+                    authentication-failure-url="/shoplogin_error.html" />
+        <!-- 关闭跨域站点攻击 -->
+        <csrf disabled="true" />
+
+        <!-- iframe框架展示样式 -->
+        <headers>
+            <frame-options policy="SAMEORIGIN" />
+        </headers>
+
+        <!-- logout-url:指定退出地址（自定义地址）【此地址可以使用默认地址：logout】 logout-success-url:退出成功后跳转那个页面 -->
+        <logout logout-success-url="/shoplogin.html" />
+
+    </http>
+
+    <!-- 引用dubbo 服务 -->
+    <!-- 定义表现层服务名称: 服务消费者名称 -->
+    <dubbo:application name="shop-web" />
+    <!-- 指定服务消费地址 -->
+    <dubbo:registry address="zookeeper://192.168.72.150:2181" />
+    <!-- 引入商家服务代理对象 -->
+    <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
+    <dubbo:reference id="sellerService"
+                     interface="com.pyg.manager.service.SellerService" />
+
+    <!-- 自定义认证实现类 -->
+    <beans:bean id="userDetailService"
+                class="com.pyg.shop.service.impl.UserDetailsServiceImpl">
+        <beans:property name="sellerService" ref="sellerService"></beans:property>
+    </beans:bean>
+
+    <!-- 3，配置认证管理器 -->
+    <authentication-manager>
+        <authentication-provider user-service-ref="userDetailService">
+            <password-encoder ref="passwordEncoder"></password-encoder>
+        </authentication-provider>
+    </authentication-manager>
+
+    <!-- 定义加密算法对象  -->
+    <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></beans:bean>
+
+</beans:beans>
