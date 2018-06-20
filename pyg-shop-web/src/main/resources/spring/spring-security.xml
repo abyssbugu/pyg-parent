@@ -16,6 +16,7 @@
     <http pattern="/css/**" security="none"></http>
     <http pattern="/plugins/**" security="none"></http>
     <http pattern="/seller/add" security="none"></http>
+    <http pattern="/assets/img/favicon.ico" security="none"></http>
 
     <!-- 2，配置安全认证拦截规则 -->
     <http use-expressions="false">
