@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/typeTemplate")
 public class TypeTemplateController {
@@ -80,6 +83,17 @@ public class TypeTemplateController {
 		return result;
 	}
 
+	/**
+	 * 需求：根据模板id查询模板规格属性值，根据规格id查询规格选项
+	 * 参数：模板id
+	 * 返回值：List<Map>
+	 */
+	@RequestMapping("findSpecList")
+	public List<Map> findSpecList(Long id){
+		//查询模板对象
+		List<Map> list = typeTemplateService.findSpecList(id);
+		return list;
 
+	}
 
 }

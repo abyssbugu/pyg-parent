@@ -5,6 +5,9 @@ import com.pyg.utils.PageResult;
 import com.pyg.utils.PygResult;
 import com.pyg.vo.Specification;
 
+import java.util.List;
+import java.util.Map;
+
 public interface TypeTemplateService {
 	
 	/**
@@ -40,5 +43,12 @@ public interface TypeTemplateService {
 	 * 返回值：PygResult
 	 */
 	 PygResult delete(Long[] ids);
+
+	/**
+	 * 需求：根据模板id查询模板规格属性值，根据规格id查询规格选项
+	 * 参数：模板id
+	 * 返回值：List<Map>
+	 */
+	public List<Map> findSpecList(Long id);
 
 }

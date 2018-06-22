@@ -1,16 +1,21 @@
 package com.pyg.manager.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.pyg.manager.service.TypeTemplateService;
+import com.pyg.mapper.TbSpecificationOptionMapper;
 import com.pyg.mapper.TbTypeTemplateMapper;
+import com.pyg.pojo.TbSpecificationOption;
+import com.pyg.pojo.TbSpecificationOptionExample;
 import com.pyg.pojo.TbTypeTemplate;
 import com.pyg.utils.PageResult;
 import com.pyg.utils.PygResult;
-import com.pyg.vo.Specification;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class TypeTemplateServiceImpl implements TypeTemplateService {
@@ -18,6 +23,9 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 	// 注入模板mapper接口代理对象
 	@Autowired
 	private TbTypeTemplateMapper typeTemplateMapper;
+	@Autowired
+	private TbSpecificationOptionMapper tbSpecificationOptionMapper;
+
 
 	/**
 	 * 需求：查询分页类别 参数： Integer page,Interger rows 返回值： PageResult
@@ -96,6 +104,23 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 			e.printStackTrace();
 			return new PygResult(false, "删除失败");
 		}
+	}
+
+	@Override
+	public List<Map> findSpecList(Long id) {
+		TbTypeTemplate tbTypeTemplate = typeTemplateMapper.selectByPrimaryKey(id);
+		String specIds = tbTypeTemplate.getSpecIds();
+		List<Map> list = JSON.parseArray(specIds, Map.class);
+		for (Map map : list) {
+			Long specId = new Double(map.get("id") + "").longValue();
+			TbSpecificationOptionExample example = new TbSpecificationOptionExample();
+			TbSpecificationOptionExample.Criteria criteria = example.createCriteria();
+			criteria.andSpecIdEqualTo(specId);
+			List<TbSpecificationOption> options = tbSpecificationOptionMapper.selectByExample(example);
+			map.put("options", options);
+
+		}
+		return list;
 	}
 
 }

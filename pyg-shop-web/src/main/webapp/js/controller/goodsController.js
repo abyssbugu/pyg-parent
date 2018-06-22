@@ -138,12 +138,21 @@ app.controller('goodsController' ,function($scope,$controller,goodsService,itemC
     //监控模板id变化，根据模板id查询模板对象
     $scope.$watch('entity.goods.typeTemplateId',function(newValue,oldValue){
         //调用服务方法，根据新的分类id查询下级菜单
-        typeTemplateService.findOne(newValue).success(function(data){
+        typeTemplateService.findOne(newValue).success(function (data) {
             //获取模板id
             $scope.typeTemplate = data;
             //获取模板中品牌数据
             $scope.typeTemplate.brandIds = JSON.parse($scope.typeTemplate.brandIds);
-        })
+
+            // 获取模板扩展属性数据值赋值货品描述表扩展属性字段
+            $scope.entity.goodsDesc.customAttributeItems = JSON
+                .parse($scope.typeTemplate.customAttributeItems);
+        });
+
+        // 调用service方法，查询规格选项值
+        typeTemplateService.findSpecList(newValue).success(function(data) {
+            $scope.specList = data;
+        });
     });
 
 
@@ -176,6 +185,147 @@ app.controller('goodsController' ,function($scope,$controller,goodsService,itemC
         $scope.entity.goodsDesc.itemImages.splice(index, 1);
     };
 
+// 定义方法
+    searchSpecAttribute = function(list, key, name) {
+        // 循环规格选项集合
+        // specificationItems:[{"attributeName":"网络","attributeValue":["电信2G","联通2G"]},{}]
+        for (var i = 0; i < list.length; i++) {
+            if (list[i][key] == name) {
+                return list[i];
+            }
+        }
 
+        return null;
+
+    }
+    // 创建方法，构造规格选项参数
+    // 规格选项参数需要保存到：goodsDesc:{specificationItems:[{"attributeName":"网络","attributeValue":["电信2G","联通2G"]},
+    // {"attributeName":"机身内存","attributeValue":["32G","16G","64G"]}]}
+    // 参数1：选择事件对象
+    // 参数2：规格值 --> 网络，机身内存
+    // 参数3：规格选项值 ： 电信2G 16G
+    $scope.updateSpecAttribute = function($event, name, value) {
+        // 判断选择的规格选项属于哪个规格中的值
+        var obj = searchSpecAttribute(
+            $scope.entity.goodsDesc.specificationItems, "attributeName",
+            name);
+
+        // 判断是否为null
+        if (obj != null) {
+            //判断是否是选中事件，还是取消事件
+            if($event.target.checked){
+                obj.attributeValue.push(value);
+            }else{
+                //取消事件
+                //删除attributeValue中规格选项
+                obj.attributeValue.splice(obj.attributeValue.indexOf(value),1);
+
+                //判断规格选项是否删除完了
+                if(obj.attributeValue.length==0){
+                    //移除规格
+                    $scope.entity.goodsDesc.specificationItems.splice($scope.entity.goodsDesc.specificationItems.indexOf(obj),1);
+                }
+
+            }
+
+        } else {
+            // $scope.entity.goodsDesc.specificationItems第一次选择，没有值，，初始化
+            // $scope.entity.goodsDesc.specificationItems=[{"attributeName":”网络“,"attributeValue":[“电信2G”]}]
+            $scope.entity.goodsDesc.specificationItems.push({
+                "attributeName" : name,
+                "attributeValue" : [ value ]
+            });
+
+        }
+
+    };
+
+
+    //构造sku保存商品数据
+    //1,每一行有哪些字段数据？
+    //2,根据规格选项组合参数进行循环组合成sku行
+    //[{"attributeName":"网络","attributeValue":["电信2G","联通2G","移动2G"]},{"attributeName":"机身内存","attributeValue":["16G","32G"]}]
+    $scope.createSKUTable = function(){
+        //需要保存到后端sku数据格式初始化构造
+        $scope.itemList = [{spec:{},price:0,num:999999,status:0,isDefault:0}];
+        //获取组装规格选项集合对象
+        //[{"attributeName":"网络","attributeValue":["电信2G","联通2G","移动2G"]},{"attributeName":"机身内存","attributeValue":["16G","32G"]}]
+        var optionList = $scope.entity.goodsDesc.specificationItems;
+
+        //循环调用
+        for(var i=0;i<optionList.length;i++){
+            //第一次调用：
+            //参数1：$scope.itemList = [{spec:{},price:0,num:999999,status:0,isDefault:0}]
+            //参数2：网络
+            //参数3：["电信2G","联通2G","移动2G"]
+
+            //第二次循环：
+            //参数1：$scope.itemList = [{spec:{"网络","电信2G"},price:0,num:999999,status:0,isDefault:0},
+            //{spec:{"网络","联通2G"},price:0,num:999999,status:0,isDefault:0},
+            //{spec:{"网络","移动2G"},price:0,num:999999,status:0,isDefault:0}]
+            //参数2：机身内存
+            //参数3：["16G","32G"]
+
+            $scope.itemList =
+                createRow($scope.itemList,
+                    optionList[i].attributeName,
+                    optionList[i].attributeValue);
+        };
+
+
+
+
+    };
+
+    //创建sku行
+    //规格选项不同组合构造成不同sku行
+    //参数1：[{spec:{},price:0,num:999999,status:0,isDefault:0}]
+    //参数2：规格值
+    //参数3：["电信2G","联通2G","移动2G"]
+    createRow = function(list,name,values){
+        //第一次调用：
+        //参数1：$scope.itemList = [{spec:{},price:0,num:999999,status:0,isDefault:0}]
+        //参数2：网络
+        //参数3：["电信2G","联通2G","移动2G"]
+
+        //第二次循环：
+        //第二次循环：
+        //参数1：$scope.itemList = [{spec:{"网络","电信2G"},price:0,num:999999,status:0,isDefault:0},
+        //{spec:{"网络","联通2G"},price:0,num:999999,status:0,isDefault:0},
+        //{spec:{"网络","移动2G"},price:0,num:999999,status:0,isDefault:0}]
+        //参数2：机身内存
+        //参数3：["16G","32G"]
+
+
+        var newList = [];
+        //循环list集合
+        for(var i=0;i<list.length;i++){
+            //获取行数据
+            var oldRow = list[i];
+            //循环规格选项值
+            for(var j=0;j<values.length;j++){
+                //新建一行
+                //{spec:{},price:0,num:999999,status:0,isDefault:0}
+                var newRow = JSON.parse(JSON.stringify(oldRow));
+                //向新行中添加数据
+                //{spec:{"网络"："2G"}}
+                newRow.spec[name]=values[j];
+
+                //把新的行放入newList集合
+                newList.push(newRow);
+
+            }
+
+        }
+
+
+        //第一次循环结束：
+        //newList=[{spec:{"网络","电信2G"},price:0,num:999999,status:0,isDefault:0},
+        //{spec:{"网络","联通2G"},price:0,num:999999,status:0,isDefault:0},
+        //{spec:{"网络","移动2G"},price:0,num:999999,status:0,isDefault:0}]
+        return newList;
+
+
+    }
 
 });	
