@@ -1,5 +1,5 @@
  //控制层 
-app.controller('goodsController' ,function($scope,$controller,goodsService,itemCatService,typeTemplateService){
+app.controller('goodsController' ,function($scope,$controller,goodsService,itemCatService,typeTemplateService,uploadService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -122,6 +122,19 @@ app.controller('goodsController' ,function($scope,$controller,goodsService,itemC
         })
     });
 
+
+    // 实现扩展属性数据封装，封装商品描述对象customAttributeItems字段
+    // goods包装类对象属性一一对应
+    // 参数接受格式：通过后台接受参数pojo反向推导。
+    $scope.entity = {
+        goods : {},
+        goodsDesc : {
+            itemImages : [],
+            customAttributeItems : [],
+            specificationItems : []
+        }
+    };
+
     //监控模板id变化，根据模板id查询模板对象
     $scope.$watch('entity.goods.typeTemplateId',function(newValue,oldValue){
         //调用服务方法，根据新的分类id查询下级菜单
@@ -132,6 +145,37 @@ app.controller('goodsController' ,function($scope,$controller,goodsService,itemC
             $scope.typeTemplate.brandIds = JSON.parse($scope.typeTemplate.brandIds);
         })
     });
+
+
+    // 定义文件上传方法
+    $scope.uploadFile = function() {
+        // 调用上传文件服务层方法，实现文件上传
+        uploadService.uploadFile().success(function(data) {
+            // 判断上传文件是否成功
+            if (data.success) {
+                $scope.image_entity.url = data.message;
+            } else {
+                alert(data.message);
+            }
+        })
+    };
+
+    // 参数结构
+    // entity = {goods:{},goodsDesc:{itemImage:[{},{}]},itemList:[]}
+
+    // 实现图片保存
+
+    // 保存图片地址方法，把图片地址封装到$scope
+    $scope.add_image_entity = function() {
+        // 把图片地址推送到itemImages
+        $scope.entity.goodsDesc.itemImages.push($scope.image_entity);
+    };
+
+    // 删除上传的图片
+    $scope.dele_image_entity = function(index) {
+        $scope.entity.goodsDesc.itemImages.splice(index, 1);
+    };
+
 
 
 });	

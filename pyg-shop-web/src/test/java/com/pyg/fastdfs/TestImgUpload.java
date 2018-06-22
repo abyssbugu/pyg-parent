@@ -39,6 +39,9 @@ public class TestImgUpload {
 
         }
 
+//        group1
+//        M00/00/04/wKhCQ1ssxyOAGzJLAAFHBF_C5-M223.png
+
     }
 
 }

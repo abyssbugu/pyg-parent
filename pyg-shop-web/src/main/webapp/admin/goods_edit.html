@@ -24,6 +24,7 @@
     <script src="../js/base.js"></script>
     <script src="../js/service/goodsService.js"></script>
     <script src="../js/service/itemCatService.js"></script>
+    <script src="../js/service/uploadService.js"></script>
     <script src="../js/service/typeTemplateService.js"></script>
     <script src="../js/controller/baseController.js"></script>
     <script src="../js/controller/goodsController.js"></script>
@@ -142,9 +143,7 @@
                         <!-- 颜色图片 -->
                         <div class="btn-group">
                             <button type="button" class="btn btn-default" title="新建" data-target="#uploadModal"
-                                    data-toggle="modal"><i class="fa fa-file-o"></i> 新建
-                            </button>
-                            <button type="button" class="btn btn-default" title="删除"><i class="fa fa-trash-o"></i> 删除
+                                    data-toggle="modal" ng-click="image_entity={}"><i class="fa fa-file-o"></i> 新建
                             </button>
                         </div>
 
@@ -158,13 +157,16 @@
                                 <th class="sorting">图片</th>
                             </thead>
                             <tbody>
-                            <tr>
+                            <tr ng-repeat="image in entity.goodsDesc.itemImages">
                                 <td><input type="checkbox"></td>
-                                <td>
-
+                                <td>{{image.color}}
                                 </td>
                                 <td>
-                                    <img alt="" src="" width="100px" height="100px">
+                                    <img alt="" src="{{image.url}}" width="100px" height="100px">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-default" title="删除" ng-click="dele_image_entity($index)"><i class="fa fa-trash-o"></i> 删除
+                                    </button>
                                 </td>
                             </tr>
                             </tbody>
