@@ -1,19 +1,18 @@
 package com.pyg.manager.service.impl;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
-import com.pyg.mapper.TbGoodsDescMapper;
-import com.pyg.mapper.TbItemMapper;
-import com.pyg.pojo.TbGoodsDesc;
-import com.pyg.pojo.TbItem;
+import com.alibaba.fastjson.JSON;
+import com.pyg.mapper.*;
+import com.pyg.pojo.*;
+import com.pyg.utils.PygResult;
 import com.pyg.vo.Goods;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.pyg.mapper.TbGoodsMapper;
-import com.pyg.pojo.TbGoods;
-import com.pyg.pojo.TbGoodsExample;
 import com.pyg.pojo.TbGoodsExample.Criteria;
 import com.pyg.manager.service.GoodsService;
 
@@ -29,10 +28,26 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Autowired
     private TbGoodsMapper goodsMapper;
+
+    // 注入货品描述对象
     @Autowired
     private TbGoodsDescMapper goodsDescMapper;
+
+    // 注入商品mapper接口代理对象
     @Autowired
     private TbItemMapper itemMapper;
+
+    // 注入品牌mapper
+    @Autowired
+    private TbBrandMapper brandMapper;
+
+    // 注入商品分类mapper接口代理对象
+    @Autowired
+    private TbItemCatMapper itemCatMapper;
+
+    // 注入商家mapper接口代理对象
+    @Autowired
+    private TbSellerMapper sellerMapper;
 
 
     /**
@@ -132,28 +147,170 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     /**
-     * 增加
-     * 添加商品数据
-     * 1，保存货品
-     * 2，保存货品描述
-     * 3，保存商品集合SKU
-     * 注意：
-     * 一个货品对应多个商品。
+     * 增加 添加商品数据 1，保存货品 2，保存货品描述 3，保存商品集合SKU 注意： 一个货品对应多个商品。
      * 在保存时候必须返回货品主键，在保存货品时候，把货品主键设置到商品外键中，实现关系维护。
      */
     @Override
     public void add(Goods goods) {
+        // 1，配置货品TbGoodsMapper.xml返回主键
+        // 2,从包装类对象中获取货品对象，实现保存
         TbGoods tbGoods = goods.getGoods();
-        TbGoodsDesc tbGoodsDesc = goods.getGoodsDesc();
-        //设置未申请状态
-        tbGoods.setAuditStatus("0");
-        goodsMapper.insertSelective(tbGoods);
-        //设置外键
-        tbGoodsDesc.setGoodsId(tbGoods.getId());
-        //插入商品拓展数据
-        goodsDescMapper.insertSelective(tbGoodsDesc);
 
-        //保存商品表
+        // 直接使用insert，其他字段如果没有值，默认值为NULL
+        // insertSelective,自动对保存自动值进行非空判断，如果此字段为null,此字段不参与值得插入，此字段将会直接使用默认值。
+        // 保存
+        goodsMapper.insertSelective(tbGoods);
+
+        // 3，保存货品描述表
+        // 获取描述对象
+        TbGoodsDesc goodsDesc = goods.getGoodsDesc();
+        // 设置外键
+        goodsDesc.setGoodsId(tbGoods.getId());
+        // 保存
+        goodsDescMapper.insertSelective(goodsDesc);
+
+        // 保存商品表
+        // 获取sku集合对象
+        List<TbItem> itemList = goods.getItemList();
+
+        // 获取是否启动规格属性值
+        String isEnableSpec = tbGoods.getIsEnableSpec();
+
+        // 判断是否启用规格
+        if ("1".equals(isEnableSpec)) {
+            // 循环sku集合，保存sku
+            for (TbItem tbItem : itemList) {
+
+                // 获取spec规格属性组合
+                // {"网络":"电信2G","内存"：“”}
+                String spec = tbItem.getSpec();
+                // 把规格属性组合转换成map对象
+                Map<String, String> specs = (Map<String, String>) JSON.parse(spec);
+
+                // 定义空值，封装规格属性值
+                String specValue = "";
+
+                // 循环获取规格值
+                for (String key : specs.keySet()) {
+                    specValue += specs.get(key);
+                }
+                // 标题
+                // spu标题+sku规格属性组合
+                tbItem.setTitle(tbGoods.getGoodsName() + "+" + specValue);
+
+                // 添加sku商品基本属性数据
+                this.createItem(tbGoods, tbItem, goodsDesc);
+
+                // 保存
+                itemMapper.insertSelective(tbItem);
+
+            }
+        } else {
+
+            // 创建一个商品对象
+            TbItem tbItem = new TbItem();
+            // 标题
+            tbItem.setTitle(tbGoods.getGoodsName());
+            // 设置价格
+            tbItem.setPrice(tbGoods.getPrice());
+            // 库存数量
+            tbItem.setNum(9999999);
+            // 设置是否启用
+            tbItem.setStatus("0");
+            // 设置是否默认
+            tbItem.setIsDefault("0");
+
+            // 设置商品属性
+            this.createItem(tbGoods, tbItem, goodsDesc);
+
+            // 保存
+            itemMapper.insertSelective(tbItem);
+
+        }
+
+    }
+
+    private void createItem(TbGoods tbGoods, TbItem tbItem, TbGoodsDesc goodsDesc) {
+        // TODO Auto-generated method stub
+        // 买点
+        tbItem.setSellPoint(tbGoods.getCaption());
+
+        // 商品图片设置
+        // 从商品描述表中获取图片，把图片保存到sku表中
+        // [{"color":"蓝色","url":"http://192.168.66.67/group1/M00/00/02/wKhCQ1qzBHCABs3xAA1rIuRd3Es100.jpg"},{"color":"黑色","url":"http://192.168.66.67/group1/M00/00/02/wKhCQ1qzBHmAVteGAAvea_OGt2M066.jpg"}]
+        String itemImages = goodsDesc.getItemImages();
+        // 把字符转换成对象
+        List<Map> imagesList = JSON.parseArray(itemImages, Map.class);
+
+        String url = "";
+        // 判断是否为null
+        if (imagesList != null && imagesList.size() > 0) {
+            url = (String) imagesList.get(0).get("url");
+
+        }
+        // 添加图片地址
+        tbItem.setImage(url);
+        // 分类id
+        tbItem.setCategoryid(tbGoods.getCategory3Id());
+
+        // 时间
+        Date date = new Date();
+        tbItem.setUpdateTime(date);
+        tbItem.setCreateTime(date);
+
+        // 实际花费场价
+        tbItem.setCostPirce(tbItem.getPrice());
+
+        // 市场价
+        tbItem.setMarketPrice(tbItem.getPrice());
+
+        // spu id
+        tbItem.setGoodsId(tbGoods.getId());
+
+        // sellerId
+        tbItem.setSellerId(tbGoods.getSellerId());
+
+        // 品牌名称
+        TbBrand brand = brandMapper.selectByPrimaryKey(tbGoods.getBrandId());
+        tbItem.setBrand(brand.getName());
+        // 分类名称
+        TbItemCat itemCat = itemCatMapper.selectByPrimaryKey(tbGoods.getCategory3Id());
+        tbItem.setCategory(itemCat.getName());
+        // 商家名称
+        TbSeller seller = sellerMapper.selectByPrimaryKey(tbGoods.getSellerId());
+        tbItem.setSeller(seller.getNickName());
+
+    }
+
+    /**
+     * 需求：审核商家状态
+     * 0,未审核
+     * 1，审核通过
+     * 2，未通过
+     * 3，关闭
+     */
+    public PygResult updateStatus(Long[] ids, String status) {
+        try {
+            //循环id数组
+            for (Long id : ids) {
+                //根据id查询货品对象
+                TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
+                //设置状态
+                tbGoods.setAuditStatus(status);
+
+                //修改
+                goodsMapper.updateByPrimaryKeySelective(tbGoods);
+
+            }
+
+            //修改成功
+            return new PygResult(true, "修改成功");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            //修改失败
+            return new PygResult(false, "修改失败");
+        }
     }
 
 }

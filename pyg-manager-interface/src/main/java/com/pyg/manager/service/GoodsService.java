@@ -5,6 +5,7 @@ import java.util.List;
 import com.pyg.pojo.TbGoods;
 
 import com.pyg.utils.PageResult;
+import com.pyg.utils.PygResult;
 import com.pyg.vo.Goods;
 
 /**
@@ -72,6 +73,15 @@ public interface GoodsService {
      *增加货物
      * */
     void add(Goods goods);
+
+    /**
+     * 需求：审核商家状态
+     * 0,未审核
+     * 1，审核通过
+     * 2，未通过
+     * 3，关闭
+     */
+    PygResult updateStatus(Long[] ids, String status);
 
 
 }

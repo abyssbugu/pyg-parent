@@ -22,7 +22,9 @@
 	<script src="../plugins/angularjs/pagination.js"></script>
 	<script src="../js/base_pagination.js"></script>
 	<script src="../js/service/goodsService.js"></script>
+	<script src="../js/service/uploadService.js"></script>
 	<script src="../js/service/itemCatService.js"></script>
+	<script src="../js/service/typeTemplateService.js"></script>
 	<script src="../js/controller/baseController.js"></script>
 	<script src="../js/controller/goodsController.js"></script>
 
@@ -32,7 +34,7 @@
 <!-- .box-body -->
 
 <div class="box-header with-border">
-	<h3 class="box-title">商品审核</h3>
+	<h3 class="box-title">商品管理</h3>
 </div>
 
 <div class="box-body">
@@ -44,16 +46,21 @@
 		<div class="pull-left">
 			<div class="form-group form-inline">
 				<div class="btn-group">
-					<button type="button" class="btn btn-default" title="删除" ng-click="dele();">
+					<button type="button" class="btn btn-default" title="新建">
+						<i class="fa fa-file-o"></i> 新建
+					</button>
+					<button type="button" class="btn btn-default" title="删除">
 						<i class="fa fa-trash-o"></i> 删除
 					</button>
-					<button type="button" class="btn btn-default" title="审核通过" ng-click="updateStatus('1');">
-						<i class="fa fa-check"></i> 审核通过
+					<button type="button" class="btn btn-default" title="提交审核">
+						<i class="fa fa-check"></i> 提交审核
 					</button>
-					<button type="button" class="btn btn-default" title="驳回" ng-click="updateStatus('2');">
-						<i class="fa fa-ban"></i> 驳回
+					<button type="button" class="btn btn-default" title="屏蔽"
+							onclick='confirm("你确认要屏蔽吗？")'>
+						<i class="fa fa-ban"></i> 屏蔽
 					</button>
-					<button type="button" class="btn btn-default" title="刷新">
+					<button type="button" class="btn btn-default" title="刷新"
+							onclick="window.location.reload();">
 						<i class="fa fa-refresh"></i> 刷新
 					</button>
 				</div>
@@ -61,8 +68,14 @@
 		</div>
 		<div class="box-tools pull-right">
 			<div class="has-feedback">
-				商品名称：<input>
-				<button class="btn btn-default">查询</button>
+				状态：<select ng-model="searchEntity.auditStatus">
+				<option value="">全部</option>
+				<option value="0">未申请</option>
+				<option value="1">申请中</option>
+				<option value="2">审核通过</option>
+				<option value="3">已驳回</option>
+			</select> 商品名称：<input ng-model="searchEntity.goodsName">
+				<button class="btn btn-default" ng-click="reloadList();">查询</button>
 			</div>
 		</div>
 		<!--工具栏/-->
@@ -86,7 +99,7 @@
 			</thead>
 			<tbody>
 			<tr ng-repeat="entity in list">
-				<td><input type="checkbox" ng-click="updateSelection($event,entity.id)"></td>
+				<td><input type="checkbox"></td>
 				<td>{{entity.id}}</td>
 				<td>{{entity.goodsName}}</td>
 				<td>{{entity.price}}</td>

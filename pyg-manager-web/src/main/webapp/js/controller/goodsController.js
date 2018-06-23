@@ -1,8 +1,43 @@
  //控制层 
-app.controller('goodsController' ,function($scope,$controller   ,goodsService){	
+app.controller('goodsController' ,function($scope,$controller   ,goodsService,itemCatService){
 	
 	$controller('baseController',{$scope:$scope});//继承
-	
+
+
+    //商家商品审核方法
+    $scope.updateStatus =function(status){
+        //调用service方法
+        goodsService.updateStatus($scope.selectIds,status).success(function(data){
+            //判断
+            if(data.success){
+                $scope.reloadList();
+                //清空
+                $scope.selectIds=[];
+            }else{
+                alert(data.message);
+            }
+        })
+    }
+
+    $scope.status = [ '未审核', '已审核', '审核未通过', '关闭' ];// 商品状态
+
+    // 查询所有商品分类
+    // 1，定义数组
+    // 2,查询出所有分类封装到数组
+    // 3,把分类id作为数组的角标。分类名称值此此角标对应值。
+    $scope.catList = [];
+    // 查询所有
+    $scope.findAllItemCatList = function() {
+        itemCatService.findAll().success(function(data) {
+            // 循环回调函数集合
+            for (var i = 0; i < data.length; i++) {
+                // catList = ["","图书、音像、电子书刊","电子书刊","电子书"....]
+                // 获取数组值：catList[1]--->catList[entity.category1Id]
+                // catList[0]="张三"
+                $scope.catList[data[i].id] = data[i].name;
+            }
+        })
+    };
     //读取列表数据绑定到表单中  
 	$scope.findAll=function(){
 		goodsService.findAll().success(

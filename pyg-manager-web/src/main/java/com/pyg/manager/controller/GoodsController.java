@@ -109,5 +109,18 @@ public class GoodsController {
 	public PageResult search(@RequestBody TbGoods goods, int page, int rows  ){
 		return goodsService.findPage(goods, page, rows);		
 	}
+
+	/**
+	 * 需求：审核商家状态
+	 * 0,未审核
+	 * 1，审核通过
+	 * 2，未通过
+	 * 3，关闭
+	 */
+	@RequestMapping("updateStatus")
+	public PygResult updateStatus(Long[] ids,String status) {
+		PygResult result = goodsService.updateStatus(ids,status);
+		return result;
+	}
 	
 }
