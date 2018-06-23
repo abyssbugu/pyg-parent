@@ -102,7 +102,11 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public void delete(Long[] ids) {
         for (Long id : ids) {
-            goodsMapper.deleteByPrimaryKey(id);
+//            goodsMapper.deleteByPrimaryKey(id);
+
+            TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
+            tbGoods.setIsDelete(null);
+            goodsMapper.updateByPrimaryKey(tbGoods);
         }
     }
 
