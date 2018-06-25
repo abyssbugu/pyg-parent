@@ -8,7 +8,7 @@
         http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
      <!-- 1,扫描资源文件 -->
-    <!--<context:property-placeholder location="classpath:config/application.properties" />-->
+    <context:property-placeholder location="classpath:config/application.properties" />
 	
 	<!-- 2,注解驱动  默认:Jackson-->
 	<mvc:annotation-driven>
@@ -28,6 +28,20 @@
 	
 	<!--放行静态资源  -->
 	<mvc:default-servlet-handler/>
+
+
+	<!-- 文件上传支持：文件上传解析器 -->
+	<!--
+		1,前台代码
+		1）页面上传样式
+		2）前端js上传代码（controller，service，引入uploadService,依赖注入service）
+		3）后台代码：定义接受图片上传请求controller，配置文件：图片服务地址（applicaton.properties,client.conf）,支持文件上传文件上传解析器（springmvc.xml）
+
+	 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8"></property>
+		<property name="maxUploadSize" value="5242880"></property>
+	</bean>
 
 	<!-- 引用dubbo 服务 -->
 	<!-- 定义表现层服务名称: 服务消费者名称 -->

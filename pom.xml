@@ -11,6 +11,8 @@
         <module>pyg-manager-web</module>
         <module>pyg-shop-web</module>
         <module>pyg-sqlGen</module>
+        <module>pyg-content</module>
+        <module>pyg-portal-web</module>
     </modules>
     <packaging>pom</packaging>
     <!-- 集中定义依赖版本号 -->
