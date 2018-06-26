@@ -28,7 +28,6 @@ public class SpringDataRedisDemo {
 		//获取值
 		String value  = (String) redisTemplate.boundValueOps("itcast").get();
 		System.out.println(value);
-	
 	}
 	
 	/**
