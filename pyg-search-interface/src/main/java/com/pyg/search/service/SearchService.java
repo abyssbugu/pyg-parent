@@ -8,6 +8,6 @@ public interface SearchService {
 	 * 参数：String keywords 
 	 * 返回值：Map
 	 */
-	Map<String, Object> searchList(String keywords);
+	Map<String, Object> searchList(Map<String, Object> searchMap);
 
 }

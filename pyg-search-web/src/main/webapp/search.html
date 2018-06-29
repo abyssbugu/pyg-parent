@@ -18,7 +18,7 @@
 </head>
 
 <body ng-app="pyg" ng-controller="searchController"
-	ng-init="searchList();">
+	ng-init="loadSearchList();">
 	<!-- 头部栏位 -->
 	<!--页面顶部-->
 	<div id="nav-bottom">
@@ -208,12 +208,12 @@
 					<div class="fl key">网络制式</div>
 					<div class="fl value">
 						<ul class="type-list">
-							<li><a href="#" ng-click="addFilterCondition('网络制式','电信2G')">电信2G</a></li>
-							<li><a href="#" ng-click="addFilterCondition('网络制式','电信3G')">电信3G</a></li>
-							<li><a href="#" ng-click="addFilterCondition('网络制式','移动3G')">移动3G</a></li>
-							<li><a href="#" ng-click="addFilterCondition('网络制式','联通3G')">联通3G</a></li>
-							<li><a href="#" ng-click="addFilterCondition('网络制式','联通4G')">联通4G</a></li>
-							<li><a href="#" ng-click="addFilterCondition('网络制式','联通4G')">移动4G</a></li>
+							<li><a href="#" ng-click="addFilterCondition('网络','电信2G')">电信2G</a></li>
+							<li><a href="#" ng-click="addFilterCondition('网络','电信3G')">电信3G</a></li>
+							<li><a href="#" ng-click="addFilterCondition('网络','移动3G')">移动3G</a></li>
+							<li><a href="#" ng-click="addFilterCondition('网络','联通3G')">联通3G</a></li>
+							<li><a href="#" ng-click="addFilterCondition('网络','联通4G')">联通4G</a></li>
+							<li><a href="#" ng-click="addFilterCondition('网络','联通4G')">移动4G</a></li>
 						</ul>
 					</div>
 					<div class="fl ext"></div>
@@ -222,12 +222,12 @@
 					<div class="fl key">内存</div>
 					<div class="fl value">
 						<ul class="type-list">
-							<li><a href="#" ng-click="addFilterCondition('内存','4G')">4G</a></li>
-							<li><a href="#" ng-click="addFilterCondition('内存','8G')">8G</a></li>
-							<li><a href="#" ng-click="addFilterCondition('内存','16G')">16G</a></li>
-							<li><a href="#" ng-click="addFilterCondition('内存','32G')">32G</a></li>
-							<li><a href="#" ng-click="addFilterCondition('内存','64G')">64G</a></li>
-							<li><a href="#" ng-click="addFilterCondition('内存','128G')">128G</a></li>
+							<li><a href="#" ng-click="addFilterCondition('机身内存','4G')">4G</a></li>
+							<li><a href="#" ng-click="addFilterCondition('机身内存','8G')">8G</a></li>
+							<li><a href="#" ng-click="addFilterCondition('机身内存','16G')">16G</a></li>
+							<li><a href="#" ng-click="addFilterCondition('机身内存','32G')">32G</a></li>
+							<li><a href="#" ng-click="addFilterCondition('机身内存','64G')">64G</a></li>
+							<li><a href="#" ng-click="addFilterCondition('机身内存','128G')">128G</a></li>
 						</ul>
 					</div>
 					<div class="fl ext"></div>
@@ -259,11 +259,12 @@
 				<div class="sui-navbar">
 					<div class="navbar-inner filter">
 						<ul class="sui-nav">
-							<li class="active"><a href="#">综合</a></li>
+							<li class="active"><a href="#" ng-click="addSort('','')">综合</a></li>
 							<li><a href="#">销量</a></li>
-							<li><a href="#">新品</a></li>
+							<li><a href="#" ng-click="addSort('DESC','updatetime')">新品</a></li>
 							<li><a href="#">评价</a></li>
-							<li><a href="#">价格</a></li>
+							<li><a ng-if="searchMap.sort=='DESC'" href="javascript:void(0)" ng-click="addSort('ASC','price')">价格↑</a></li>
+							<li><a ng-if="searchMap.sort=='ASC'" href="javascript:void(0)" ng-click="addSort('DESC','price')">价格↓</a></li>
 						</ul>
 					</div>
 				</div>
@@ -280,7 +281,7 @@
 									</strong>
 								</div>
 								<div class="attr">
-									<em>{{entity.title}}</em>
+									<em ng-bind-html="entity.title | trustHtml"></em>
 								</div>
 								<div class="cu">
 									<em><span>促</span>满一件可参加超值换购</em>
@@ -301,19 +302,16 @@
 				<div class="fr page">
 					<div class="sui-pagination pagination-large">
 						<ul>
-							<li class="prev disabled"><a href="#">«上一页</a></li>
-							<li class="active"><a href="#">1</a></li>
-							<li><a href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">4</a></li>
-							<li><a href="#">5</a></li>
-							<li class="dotted"><span>...</span></li>
-							<li class="next"><a href="#">下一页»</a></li>
+							<li class="prev {{isTop()?'disabled':''}}"><a href="javascript:void(0)" ng-click="queryForPage(searchMap.page-1)">«上一页</a></li>
+							<li class="dotted" ng-if="ispreDot"><span>...</span></li>
+							<li ng-repeat="p in pageLable" class="active"><a href="javascript:void(0)" ng-click="queryForPage(p)">{{p}}</a></li>
+							<li class="dotted" ng-if="isposDot"><span>...</span></li>
+							<li class="next {{isLast()?'disabled':''}}"><a href="javascript:void(0)" ng-click="queryForPage(searchMap.page+1)">下一页»</a></li>
 						</ul>
 						<div>
-							<span>共10页&nbsp;</span><span> 到第 <input type="text"
+							<span>共{{searchResult.totalPages}}页&nbsp;</span><span> 到第 <input ng-model="searchMap.page" type="text"
 								class="page-num"> 页
-								<button class="page-confirm" onclick="alert(1)">确定</button></span>
+								<button class="page-confirm" ng-click="queryForPage(searchMap.page);">确定</button></span>
 						</div>
 					</div>
 				</div>

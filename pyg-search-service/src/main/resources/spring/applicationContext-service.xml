@@ -13,7 +13,7 @@
 	<dubbo:registry address="zookeeper://192.168.72.150:2181" />
 	
 	<!-- 对外暴露服务地址端口 地址:dubbo://ip:20880/接口/方法/.. -->
-	<dubbo:protocol name="dubbo" port="20882" />
+	<dubbo:protocol name="dubbo" port="20884" />
 	
 	<!-- 把对象注册到zookeeper注册中心 : dubbox -->
 	<dubbo:annotation package="com.pyg.search.service.impl" />

@@ -87,5 +87,13 @@ app.controller('contentController' ,function($scope,contentService){
 			}			
 		);
 	}
+
+    //定义搜索方法
+    //根据关键词进行搜索
+    //如何使用静态页面跨系统传参？
+    //angualrJS参数路由问题？ 使用静态页面向另一个页面传递参数使用#?拼接参数。
+    $scope.loadSearch = function(){
+        window.location.href="http://localhost:8090/search.html#?keywords="+$scope.keywords;
+    }
     
 });	
