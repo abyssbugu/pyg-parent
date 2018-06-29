@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.pyg.mapper.TbItemMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.Criteria;
@@ -20,6 +21,7 @@ public class SearchServiceImpl implements SearchService {
 	//注入solr模板对象
 	@Autowired
 	private SolrTemplate solrTemplate;
+
 
 	/**
 	 * 需求：根据关键词进行搜索

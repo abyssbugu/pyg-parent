@@ -11,7 +11,6 @@
     <artifactId>pyg-pojo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <dependencies>
-
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-solr</artifactId>
