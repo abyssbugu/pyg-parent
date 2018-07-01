@@ -24,7 +24,7 @@ public class SpringDataRedisDemo {
 	 */
 	@Test
 	public void strKV() {
-		redisTemplate.boundValueOps("itcast").set("咱们都是中国人");
+		redisTemplate.boundValueOps("bazz").set("咱们都是中国人");
 		//获取值
 		String value  = (String) redisTemplate.boundValueOps("itcast").get();
 		System.out.println(value);

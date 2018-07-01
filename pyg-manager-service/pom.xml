@@ -78,6 +78,12 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-client</artifactId>
+            <version>5.14.3</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>

@@ -22,9 +22,7 @@ public class SearchServiceImpl implements SearchService {
 
 
 	/**
-	 * 需求：根据关键词进行搜索
-	 * 参数：String keywords 
-	 * 返回值：Map
+	 * 需求：根据关键词进行搜索 参数：String keywords 返回值：Map
 	 */
 	@Override
 	public Map<String, Object> searchList(Map<String, Object> searchMap) {

@@ -26,6 +26,9 @@ public class TestTemplate {
     @Autowired
     private SolrTemplate solrTemplate;
 
+    /**
+     * 添加数据
+     */
     @Test
     public void testAdd() {
         TbItem item = new TbItem();
@@ -40,20 +43,27 @@ public class TestTemplate {
         solrTemplate.commit();
     }
 
-
+    /**
+     * 查询数据
+     */
     @Test
     public void testFindOne() {
         TbItem item = solrTemplate.getById(1, TbItem.class);
         System.out.println(item.getTitle());
     }
 
+    /**
+     * 删除数据
+     */
     @Test
     public void testDelete() {
         solrTemplate.deleteById("1");
         solrTemplate.commit();
     }
 
-    //添加数据
+    /**
+     * 添加多个数据
+     */
     @Test
     public void testAddList() {
         List<TbItem> list = new ArrayList();
@@ -73,7 +83,9 @@ public class TestTemplate {
     }
 
 
-    //测试分页查询
+    /**
+     * 测试分页查询
+     */
     @Test
     public void testPageQuery() {
         Query query = new SimpleQuery("*:*");
@@ -85,7 +97,9 @@ public class TestTemplate {
         showList(list);
     }
 
-    //显示记录数据
+    /**
+     * 显示记录数据
+     */
     private void showList(List<TbItem> list) {
         for (TbItem item : list) {
             System.out.println(item.getTitle() + "===" + item.getPrice());
@@ -100,7 +114,8 @@ public class TestTemplate {
         Query query = new SimpleQuery("*:*");
         Criteria criteria = new Criteria("item_title").contains("2").and("item_title").contains("5");
         query.addCriteria(criteria);
-//query.setOffset(20);//开始索引(默认 0) //query.setRows(20);//每页记录数(默认 10)
+//query.setOffset(20);//开始索引(默认 0)
+// query.setRows(20);//每页记录数(默认 10)
         ScoredPage<TbItem> page = solrTemplate.queryForPage(query, TbItem.class);
         System.out.println("总记录数:" + page.getTotalElements());
         List<TbItem> list = page.getContent();
