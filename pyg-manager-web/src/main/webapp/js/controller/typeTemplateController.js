@@ -5,6 +5,11 @@ app.controller("typeTemplateController", function($scope,$controller,typeTemplat
     //继承
     //把父控制器域传递给子控制器域
     $controller('baseController',{$scope:$scope});
+    // 定义分页控件刷新方法
+    $scope.reloadList = function() {
+        $scope.findPage($scope.paginationConf.currentPage,
+            $scope.paginationConf.itemsPerPage);
+    }
 
     // 定义函数
     // 查询所有

@@ -1,6 +1,12 @@
 app.controller("brandController", function ($scope, $controller, brandService) {
     $controller("baseController", {$scope: $scope});
     //定义函数
+
+    // 定义分页控件刷新方法
+    $scope.reloadList = function() {
+        $scope.findPage($scope.paginationConf.currentPage,
+            $scope.paginationConf.itemsPerPage);
+    }
     //查询所有
     $scope.findAll = function () {
         //发送请求

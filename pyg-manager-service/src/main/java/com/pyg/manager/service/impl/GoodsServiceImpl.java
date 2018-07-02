@@ -1,5 +1,6 @@
 package com.pyg.manager.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import com.pyg.mapper.*;
 import com.pyg.pojo.*;
 import com.pyg.utils.PygResult;
 import com.pyg.vo.Goods;
+import org.apache.activemq.command.ActiveMQTopic;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
@@ -17,6 +19,12 @@ import com.pyg.pojo.TbGoodsExample.Criteria;
 import com.pyg.manager.service.GoodsService;
 
 import com.pyg.utils.PageResult;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
+
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
 
 /**
  * 服务实现层
@@ -48,6 +56,14 @@ public class GoodsServiceImpl implements GoodsService {
     // 注入商家mapper接口代理对象
     @Autowired
     private TbSellerMapper sellerMapper;
+
+    //注入模板对象
+    @Autowired
+    private JmsTemplate jmsTemplate;
+
+    //注入消息发送空间地址对象
+    @Autowired
+    private ActiveMQTopic activeMQTopic;
 
 
     /**
@@ -286,15 +302,25 @@ public class GoodsServiceImpl implements GoodsService {
 
     }
 
+
+
+
     /**
      * 需求：审核商家状态
      * 0,未审核
      * 1，审核通过
      * 2，未通过
      * 3，关闭
+     * 运营商审核：
+     * 1，发送goodsIds作为mq消息
+     * 2,搜索服务接受消息
+     * 3，搜索服务根据goodids查询审核后的商家，且已经是上架的商品。
+     * 4，搜索服务把查询出的商品设置到索引库即可实现索引库同步。
      */
     public PygResult updateStatus(Long[] ids, String status) {
         try {
+            //创建集合对象
+            List<Long> goodsIds = new ArrayList<Long>();
             //循环id数组
             for (Long id : ids) {
                 //根据id查询货品对象
@@ -305,7 +331,18 @@ public class GoodsServiceImpl implements GoodsService {
                 //修改
                 goodsMapper.updateByPrimaryKeySelective(tbGoods);
 
+                goodsIds.add(id);
             }
+
+
+            //使用消息模板对象，发送消息
+            jmsTemplate.send(activeMQTopic, new MessageCreator() {
+
+                @Override
+                public Message createMessage(Session session) throws JMSException {
+                    return session.createTextMessage(goodsIds.toString());
+                }
+            });
 
             //修改成功
             return new PygResult(true, "修改成功");
@@ -316,5 +353,6 @@ public class GoodsServiceImpl implements GoodsService {
             return new PygResult(false, "修改失败");
         }
     }
+
 
 }
