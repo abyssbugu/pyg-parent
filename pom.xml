@@ -16,6 +16,7 @@
         <module>pyg-search</module>
         <module>pyg-search-web</module>
         <module>pyg-solr-utils</module>
+        <module>pyg-html-utils</module>
     </modules>
     <packaging>pom</packaging>
     <!-- 集中定义依赖版本号 -->
