@@ -12,20 +12,22 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Abyss on 2018/7/1.
  * description:
  */
+
 /**
  * 监听器： 接受消息
+ *
  * @author hubin
  * 1，接受消息，消息类型是集合
  * 2，根据数组查询审核通过，且已经上架的商品数据
  * 3，把商品数据设置到索引库即可实现索引库同步
- *
  */
-public class SolrIndexListener implements MessageListener{
+public class SolrIndexListener implements MessageListener {
 
 
     //注入商品mapper接口代理对象
@@ -40,11 +42,11 @@ public class SolrIndexListener implements MessageListener{
     @Override
     public void onMessage(Message message) {
         // TODO Auto-generated method stub
-        if(message instanceof TextMessage) {
+        if (message instanceof TextMessage) {
             try {
                 TextMessage m = (TextMessage) message;
                 //获取消息
-                String ids =  m.getText();
+                String ids = m.getText();
                 //把字符串转换成数组
                 List<Long> goodsIds = JSON.parseArray(ids, Long.class);
                 //根据货品id查询审核后，且已经上架的商家
@@ -61,7 +63,17 @@ public class SolrIndexListener implements MessageListener{
 
                 //执行查询
                 List<TbItem> list = itemMapper.selectByExample(example);
+                for (TbItem tbItem : list) {
+                    //获取规格属性值
+                    //{"网络制式"：""}
+                    String spec = tbItem.getSpec();
+                    //把规格值转换成map对象
+                    Map<String, String> specMap = (Map<String, String>) JSON.parse(spec);
+                    //把规格属性添加到动态域字段
+                    tbItem.setSpecMap(specMap);
 
+
+                }
                 solrTemplate.saveBeans(list);
 
                 //提交

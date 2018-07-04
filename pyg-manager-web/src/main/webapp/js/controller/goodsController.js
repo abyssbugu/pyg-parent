@@ -65,25 +65,29 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService,it
 			}
 		);				
 	}
-	
-	//保存 
-	$scope.save=function(){				
-		var serviceObject;//服务层对象  				
-		if($scope.entity.id!=null){//如果有ID
-			serviceObject=goodsService.update( $scope.entity ); //修改  
-		}else{
-			serviceObject=goodsService.add( $scope.entity  );//增加 
-		}				
-		serviceObject.success(
-			function(response){
-				if(response.success){
-					//重新查询 
-		        	$scope.reloadList();//重新加载
-				}else{
-					alert(response.message);
-				}
-			}		
-		);				
+
+	// 保存
+	$scope.save = function() {
+		var serviceObject;// 服务层对象
+		if ($scope.entity.goods.id != null) {// 如果有ID
+			serviceObject = goodsService.update($scope.entity); // 修改
+		} else {
+			// 保存之前，获取富文本编辑器值，把值赋值给需要保存对象字段
+			$scope.entity.goodsDesc.introduction = editor.html();
+			// 保存
+			serviceObject = goodsService.add($scope.entity);// 增加
+		}
+		serviceObject.success(function(response) {
+			if (response.success) {
+				// 重新查询
+				// 清空保存之前数据
+				$scope.entity = {};
+				// 清空富文本编辑器
+				editor.html('');
+			} else {
+				alert(response.message);
+			}
+		});
 	}
 	
 	 
