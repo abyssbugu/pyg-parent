@@ -19,6 +19,8 @@
         <module>pyg-html-utils</module>
         <module>pyg-springboot-demo</module>
         <module>pyg-sms</module>
+        <module>pyg-user</module>
+        <module>pyg-user-web</module>
         <!--<module>pyg-sms</module>-->
     </modules>
     <packaging>pom</packaging>

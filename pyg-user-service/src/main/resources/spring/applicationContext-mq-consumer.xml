@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
+
+    <!-- 把activeMQ交给spring管理 -->
+    <bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <constructor-arg value="tcp://192.168.72.150:61616"></constructor-arg>
+    </bean>
+
+    <!-- spring 提供jms服务工厂管理activeMQ  -->
+    <bean id="connectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">
+        <property name="targetConnectionFactory" ref="targetConnectionFactory"></property>
+    </bean>
+    <!-- spring jms提供消息发送模板 -->
+    <bean class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="connectionFactory"></property>
+    </bean>
+
+    <!-- 指定消息存储空间：点对点，发布订阅  -->
+    <bean class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="smsCodeQueue"></constructor-arg>
+    </bean>
+
+
+</beans>

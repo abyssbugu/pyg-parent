@@ -56,7 +56,7 @@ public class SmsUtils {
         SendSmsRequest request = new SendSmsRequest();
         // 必填:待发送手机号
         request.setPhoneNumbers(phone);
-        System.out.println(phone);
+
         // 必填:短信签名-可在短信控制台中找到
         request.setSignName(signName);
         // 必填:短信模板-可在短信控制台中找到
@@ -71,7 +71,11 @@ public class SmsUtils {
 
         // 可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
         request.setOutId("yourOutId");
-
+//        System.out.println(phone);
+//        System.out.println(signName);
+//        System.out.println(templateCode);
+//        System.out.println(code);
+//        System.out.println("服务器之前");
         // hint 此处可能会抛出异常，注意catch
         SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
 
