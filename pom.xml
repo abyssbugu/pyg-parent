@@ -18,6 +18,8 @@
         <module>pyg-solr-utils</module>
         <module>pyg-html-utils</module>
         <module>pyg-springboot-demo</module>
+        <module>pyg-sms</module>
+        <!--<module>pyg-sms</module>-->
     </modules>
     <packaging>pom</packaging>
     <!-- 集中定义依赖版本号 -->
