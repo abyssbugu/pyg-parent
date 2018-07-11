@@ -21,7 +21,7 @@
         <module>pyg-sms</module>
         <module>pyg-user</module>
         <module>pyg-user-web</module>
-        <!--<module>pyg-sms</module>-->
+        <module>pyg-cas-demo1</module>
     </modules>
     <packaging>pom</packaging>
     <!-- 集中定义依赖版本号 -->
