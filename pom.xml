@@ -22,6 +22,7 @@
         <module>pyg-user</module>
         <module>pyg-user-web</module>
         <module>pyg-cas-demo1</module>
+        <module>pyg-cas-demo2</module>
     </modules>
     <packaging>pom</packaging>
     <!-- 集中定义依赖版本号 -->

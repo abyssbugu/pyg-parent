@@ -7,7 +7,7 @@
 <title>登录成功访问的页面</title>
 </head>
 <body>
-<h1>cas测试系统一：欢迎使用cas单点登录系统： 现在是用户：<%= request.getRemoteUser() %> 登录</h1>
+<h1>cas测试系统二：欢迎使用cas单点登录系统： 现在是用户：<%= request.getRemoteUser() %> 登录</h1>
 
 <a href="http://192.168.72.150:8080/cas/logout?service=http://www.baidu.com">单点退出/注销</a>
 </body>
