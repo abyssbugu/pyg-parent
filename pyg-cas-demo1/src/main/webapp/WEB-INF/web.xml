@@ -31,7 +31,7 @@
 		</init-param>
 		<init-param>
 			<param-name>serverName</param-name>
-			<param-value>http://192.168.31.65:9011</param-value>
+			<param-value>http://192.168.31.99:9011</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
@@ -51,7 +51,7 @@
 		</init-param>
 		<init-param>
 			<param-name>serverName</param-name>
-			<param-value>http://192.168.31.65:9011</param-value>
+			<param-value>http://192.168.31.99:9011</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>

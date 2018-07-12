@@ -8,49 +8,53 @@
     <title>我的订单</title>
      <link rel="icon" href="assets/img/favicon.ico">
 
-    <link rel="stylesheet" type="text/css" href="css/webbase.css" />
-    <link rel="stylesheet" type="text/css" href="css/pages-seckillOrder.css" />
+<link rel="stylesheet" type="text/css" href="css/webbase.css" />
+<link rel="stylesheet" type="text/css" href="css/pages-seckillOrder.css" />
+<script src="../plugins/angularjs/angular.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/service/loginService.js"></script>
+<script src="../js/controller/loginController.js"></script>
 </head>
 
-<body>
-    <!-- 头部栏位 -->
-    <!--页面顶部-->
-<div id="nav-bottom">
-	<!--顶部-->
-	<div class="nav-top">
-		<div class="top">
-			<div class="py-container">
-				<div class="shortcut">
-					<ul class="fl">
-						<li class="f-item">品优购欢迎您！</li>
-						<li class="f-item">请<a href="login.html" target="_blank">登录</a>　<span><a href="register.html" target="_blank">免费注册</a></span></li>
-					</ul>
-					<ul class="fr">
-						<li class="f-item">我的订单</li>
-						<li class="f-item space"></li>
-						<li class="f-item"><a href="home.html" target="_blank">我的品优购</a></li>
-						<li class="f-item space"></li>
-						<li class="f-item">品优购会员</li>
-						<li class="f-item space"></li>
-						<li class="f-item">企业采购</li>
-						<li class="f-item space"></li>
-						<li class="f-item">关注品优购</li>
-						<li class="f-item space"></li>
-						<li class="f-item" id="service">
-							<span>客户服务</span>
-							<ul class="service">
-								<li><a href="cooperation.html" target="_blank">合作招商</a></li>
-								<li><a href="shoplogin.html" target="_blank">商家后台</a></li>
-								<li><a href="cooperation.html" target="_blank">合作招商</a></li>
-								<li><a href="#">商家后台</a></li>
-							</ul>
-						</li>
-						<li class="f-item space"></li>
-						<li class="f-item">网站导航</li>
-					</ul>
+<body ng-app="pyg" ng-controller="loginController" ng-init="loadLoginName();">
+	<!-- 头部栏位 -->
+	<!--页面顶部-->
+	<div id="nav-bottom">
+		<!--顶部-->
+		<div class="nav-top">
+			<div class="top">
+				<div class="py-container">
+					<div class="shortcut">
+						<ul class="fl">
+							<li class="f-item">品优购欢迎您！{{loginName}}</li>
+							<li class="f-item" ng-if="loginName==null">请<a href="login.html" target="_blank">登录</a>
+								<span><a href="register.html" target="_blank">免费注册</a></span></li>
+							<li class="f-item"><a href="/logout/cas">退出登录</a></li>
+						</ul>
+						<ul class="fr">
+							<li class="f-item">我的订单</li>
+							<li class="f-item space"></li>
+							<li class="f-item"><a href="home.html" target="_blank">我的品优购</a></li>
+							<li class="f-item space"></li>
+							<li class="f-item">品优购会员</li>
+							<li class="f-item space"></li>
+							<li class="f-item">企业采购</li>
+							<li class="f-item space"></li>
+							<li class="f-item">关注品优购</li>
+							<li class="f-item space"></li>
+							<li class="f-item" id="service"><span>客户服务</span>
+								<ul class="service">
+									<li><a href="cooperation.html" target="_blank">合作招商</a></li>
+									<li><a href="shoplogin.html" target="_blank">商家后台</a></li>
+									<li><a href="cooperation.html" target="_blank">合作招商</a></li>
+									<li><a href="#">商家后台</a></li>
+								</ul></li>
+							<li class="f-item space"></li>
+							<li class="f-item">网站导航</li>
+						</ul>
+					</div>
 				</div>
 			</div>
-		</div>
 
 		<!--头部-->
 		<div class="header">
@@ -150,63 +154,92 @@ $(function(){
                 <!--左侧列表-->
                 <div class="yui3-u-1-6 list">
 
-                    <div class="person-info">
-                        <div class="person-photo"><img src="img/_/photo.png" alt=""></div>
-                        <div class="person-account">
-                            <span class="name">Michelle</span>
-                            <span class="safe">账户安全</span>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="list-items">
-                        <dl>
-							<dt><i>·</i> 订单中心</dt>
-							<dd ><a href="home-index.html"  class="list-active" >我的订单</a></dd>
-							<dd><a href="home-order-pay.html" >待付款</a></dd>
-							<dd><a href="home-order-send.html"  >待发货</a></dd>
-							<dd><a href="home-order-receive.html" >待收货</a></dd>
-							<dd><a href="home-order-evaluate.html" >待评价</a></dd>
-						</dl>
-						<dl>
-							<dt><i>·</i> 我的中心</dt>
-							<dd><a href="home-person-collect.html">我的收藏</a></dd>
-							<dd><a href="home-person-footmark.html">我的足迹</a></dd>
-						</dl>
-						<dl>
-							<dt><i>·</i> 物流消息</dt>
-						</dl>
-						<dl>
-							<dt><i>·</i> 设置</dt>
-							<dd><a href="home-setting-info.html">个人信息</a></dd>
-							<dd><a href="home-setting-address.html"  >地址管理</a></dd>
-							<dd><a href="home-setting-safe.html" >安全管理</a></dd>
-						</dl>
-                    </div>
-                </div>
-                <!--右侧主内容-->
-                <div class="yui3-u-5-6 order-pay">
-                    <div class="body">
-                        <div class="table-title">
-                            <table class="sui-table  order-table">
-                                <tr>
-                                    <thead>
-                                        <th width="35%">宝贝</th>
-                                        <th width="5%">单价</th>
-                                        <th width="5%">数量</th>
-                                        <th width="8%">商品操作</th>
-                                        <th width="10%">实付款</th>
-                                        <th width="10%">交易状态</th>
-                                        <th width="10%">交易操作</th>
-                                    </thead>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="order-detail">
-                            <div class="orders">
-                                <div class="choose-order">
-                                    <div class="sui-pagination pagination-large top-pages">
-                                        <ul>
-                                            <li class="prev disabled"><a href="#">上一页</a></li>
+				<div class="person-info">
+					<div class="person-photo">
+						<img src="img/_/photo.png" alt="">
+					</div>
+					<div class="person-account">
+						<span class="name">{{loginName}}</span> <span class="safe">账户安全</span>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="list-items">
+					<dl>
+						<dt>
+							<i>·</i> 订单中心
+						</dt>
+						<dd>
+							<a href="home-index.html" class="list-active">我的订单</a>
+						</dd>
+						<dd>
+							<a href="home-order-pay.html">待付款</a>
+						</dd>
+						<dd>
+							<a href="home-order-send.html">待发货</a>
+						</dd>
+						<dd>
+							<a href="home-order-receive.html">待收货</a>
+						</dd>
+						<dd>
+							<a href="home-order-evaluate.html">待评价</a>
+						</dd>
+					</dl>
+					<dl>
+						<dt>
+							<i>·</i> 我的中心
+						</dt>
+						<dd>
+							<a href="home-person-collect.html">我的收藏</a>
+						</dd>
+						<dd>
+							<a href="home-person-footmark.html">我的足迹</a>
+						</dd>
+					</dl>
+					<dl>
+						<dt>
+							<i>·</i> 物流消息
+						</dt>
+					</dl>
+					<dl>
+						<dt>
+							<i>·</i> 设置
+						</dt>
+						<dd>
+							<a href="home-setting-info.html">个人信息</a>
+						</dd>
+						<dd>
+							<a href="home-setting-address.html">地址管理</a>
+						</dd>
+						<dd>
+							<a href="home-setting-safe.html">安全管理</a>
+						</dd>
+					</dl>
+				</div>
+			</div>
+			<!--右侧主内容-->
+			<div class="yui3-u-5-6 order-pay">
+				<div class="body">
+					<div class="table-title">
+						<table class="sui-table  order-table">
+							<tr>
+							<thead>
+								<th width="35%">宝贝</th>
+								<th width="5%">单价</th>
+								<th width="5%">数量</th>
+								<th width="8%">商品操作</th>
+								<th width="10%">实付款</th>
+								<th width="10%">交易状态</th>
+								<th width="10%">交易操作</th>
+							</thead>
+							</tr>
+						</table>
+					</div>
+					<div class="order-detail">
+						<div class="orders">
+							<div class="choose-order">
+								<div class="sui-pagination pagination-large top-pages">
+									<ul>
+										<li class="prev disabled"><a href="#">上一页</a></li>
 
                                             <li class="next"><a href="#">下一页</a></li>
                                         </ul>
